@@ -28,6 +28,7 @@
                 <thead>
                 <tr>
                     <th>اسم المنتج</th>
+                    <th>نوع الشراء</th>
                     <th>عدد الحبات</th>
                     <th>المباع</th>
                     <th>المتبقي</th>
@@ -41,6 +42,7 @@
                 @forelse($products as $product)
                     <tr>
                         <td>{{ $product->name }}</td>
+                        <td>{{ $product->purchase_method === 'app' ? 'تطبيق' : 'كاش' }}</td>
                         <td>{{ $product->quantity }}</td>
                         <td>{{ $product->soldQuantity() }}</td>
                         <td>{{ $product->remainingQuantity() }}</td>
@@ -54,7 +56,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="8" class="text-center py-4 text-muted">لا توجد مشتريات حتى الآن.</td></tr>
+                    <tr><td colspan="9" class="text-center py-4 text-muted">لا توجد مشتريات حتى الآن.</td></tr>
                 @endforelse
                 </tbody>
             </table>

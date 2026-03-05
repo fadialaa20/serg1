@@ -24,12 +24,23 @@
                     </select>
                 </div>
                 <div class="col-md-6">
+                    <label class="form-label">نوع البيع</label>
+                    <select name="sale_method" class="form-select" required>
+                        <option value="cash" @selected(old('sale_method', 'cash') === 'cash')>كاش</option>
+                        <option value="app" @selected(old('sale_method') === 'app')>تطبيق</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
                     <label class="form-label">عدد الحبات المباعة</label>
                     <input type="number" min="1" name="quantity_sold" class="form-control" value="{{ old('quantity_sold') }}" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">سعر البيع للحبة</label>
                     <input type="number" step="0.01" min="0" name="sale_price" class="form-control" value="{{ old('sale_price') }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">مواصلات البيع</label>
+                    <input type="number" step="0.01" min="0" name="transport_cost" class="form-control" value="{{ old('transport_cost', 0) }}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">تاريخ البيع</label>

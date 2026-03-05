@@ -17,6 +17,13 @@
                     <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
                 </div>
                 <div class="col-md-6">
+                    <label class="form-label">نوع الشراء</label>
+                    <select name="purchase_method" class="form-select" required>
+                        <option value="cash" @selected(old('purchase_method', 'cash') === 'cash')>كاش</option>
+                        <option value="app" @selected(old('purchase_method') === 'app')>تطبيق</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
                     <label class="form-label">عدد الحبات</label>
                     <input type="number" name="quantity" min="1" class="form-control" value="{{ old('quantity') }}" required>
                 </div>

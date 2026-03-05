@@ -31,12 +31,14 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'purchase_method' => ['required', 'in:cash,app'],
             'quantity' => ['required', 'integer', 'min:1'],
             'wholesale_price' => ['required', 'numeric', 'min:0'],
             'transport_cost' => ['required', 'numeric', 'min:0'],
             'extra_cost' => ['nullable', 'numeric', 'min:0'],
         ], [], [
             'name' => 'اسم المنتج',
+            'purchase_method' => 'نوع الشراء',
             'quantity' => 'عدد الحبات',
             'wholesale_price' => 'سعر الحبة بالجملة',
             'transport_cost' => 'تكلفة المواصلات',
@@ -48,6 +50,7 @@ class ProductController extends Controller
 
         Product::create([
             'name' => $validated['name'],
+            'purchase_method' => $validated['purchase_method'],
             'quantity' => $validated['quantity'],
             'wholesale_price' => $validated['wholesale_price'],
             'transport_cost' => $validated['transport_cost'],
@@ -67,6 +70,7 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'purchase_method' => ['required', 'in:cash,app'],
             'quantity' => ['required', 'integer', 'min:1'],
             'wholesale_price' => ['required', 'numeric', 'min:0'],
             'transport_cost' => ['required', 'numeric', 'min:0'],
@@ -85,6 +89,7 @@ class ProductController extends Controller
 
         $product->update([
             'name' => $validated['name'],
+            'purchase_method' => $validated['purchase_method'],
             'quantity' => $validated['quantity'],
             'wholesale_price' => $validated['wholesale_price'],
             'transport_cost' => $validated['transport_cost'],

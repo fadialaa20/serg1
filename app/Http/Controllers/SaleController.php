@@ -40,13 +40,17 @@ class SaleController extends Controller
     {
         $validated = $request->validate([
             'product_id' => ['required', 'exists:products,id'],
+            'sale_method' => ['required', 'in:cash,app'],
             'quantity_sold' => ['required', 'integer', 'min:1'],
             'sale_price' => ['required', 'numeric', 'min:0'],
+            'transport_cost' => ['nullable', 'numeric', 'min:0'],
             'sale_date' => ['required', 'date'],
         ], [], [
             'product_id' => 'المنتج',
+            'sale_method' => 'نوع البيع',
             'quantity_sold' => 'عدد الحبات المباعة',
             'sale_price' => 'سعر البيع للحبة',
+            'transport_cost' => 'مواصلات البيع',
             'sale_date' => 'تاريخ البيع',
         ]);
 
@@ -62,13 +66,16 @@ class SaleController extends Controller
         }
 
         $costPerItem = $product->costPerItem();
+        $saleTransportCost = (float) ($validated['transport_cost'] ?? 0);
         $totalSale = $validated['quantity_sold'] * $validated['sale_price'];
-        $profit = $totalSale - ($costPerItem * $validated['quantity_sold']);
+        $profit = $totalSale - ($costPerItem * $validated['quantity_sold']) - $saleTransportCost;
 
         Sale::create([
             'product_id' => $product->id,
+            'sale_method' => $validated['sale_method'],
             'quantity_sold' => $validated['quantity_sold'],
             'sale_price' => $validated['sale_price'],
+            'transport_cost' => $saleTransportCost,
             'total_sale' => $totalSale,
             'profit' => $profit,
             'created_at' => Carbon::parse($validated['sale_date'])->startOfDay(),

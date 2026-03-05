@@ -37,8 +37,10 @@
                 <thead>
                 <tr>
                     <th>المنتج</th>
+                    <th>نوع البيع</th>
                     <th>عدد الحبات</th>
                     <th>سعر البيع</th>
+                    <th>مواصلات البيع</th>
                     <th>إجمالي البيع</th>
                     <th>الربح</th>
                     <th>التاريخ</th>
@@ -49,8 +51,10 @@
                 @forelse($sales as $sale)
                     <tr>
                         <td>{{ $sale->product?->name }}</td>
+                        <td>{{ $sale->sale_method === 'app' ? 'تطبيق' : 'كاش' }}</td>
                         <td>{{ $sale->quantity_sold }}</td>
                         <td>{{ number_format($sale->sale_price, 2) }} شيكل</td>
+                        <td>{{ number_format($sale->transport_cost ?? 0, 2) }} شيكل</td>
                         <td>{{ number_format($sale->total_sale, 2) }} شيكل</td>
                         <td class="{{ $sale->profit >= 0 ? 'text-success' : 'text-danger' }}">{{ number_format($sale->profit, 2) }} شيكل</td>
                         <td>{{ $sale->created_at?->format('Y-m-d') }}</td>
@@ -63,7 +67,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="text-center py-4 text-muted">لا توجد عمليات بيع.</td></tr>
+                    <tr><td colspan="9" class="text-center py-4 text-muted">لا توجد عمليات بيع.</td></tr>
                 @endforelse
                 </tbody>
             </table>
