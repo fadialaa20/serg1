@@ -2,7 +2,13 @@
 set -e
 
 # Ensure Laravel writable/runtime directories exist in container.
-mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache resources/views
+mkdir -p storage/framework/cache
+mkdir -p storage/framework/cache/data
+mkdir -p storage/framework/sessions
+mkdir -p storage/framework/views
+mkdir -p storage/logs
+mkdir -p bootstrap/cache
+mkdir -p resources/views
 chmod -R 775 storage bootstrap/cache || true
 
 # Do not fail startup on clear commands in ephemeral container filesystems.
