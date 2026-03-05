@@ -10,7 +10,7 @@ services:
     runtime: docker
     plan: free
     autoDeploy: true
-    healthCheckPath: /
+    healthCheckPath: /health
     envVars:
       - key: APP_NAME
         value: "Trader Profit System"

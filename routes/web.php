@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok'], 200);
+})->name('health');
 
 Route::get('/capital', [CapitalController::class, 'index'])->name('capital.index');
 Route::post('/capital', [CapitalController::class, 'store'])->name('capital.store');
