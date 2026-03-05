@@ -14,7 +14,6 @@ class Sale extends Model
         'sale_method',
         'quantity_sold',
         'sale_price',
-        'transport_cost',
         'total_sale',
         'profit',
         'created_at',
@@ -23,7 +22,6 @@ class Sale extends Model
 
     protected $casts = [
         'sale_price' => 'decimal:2',
-        'transport_cost' => 'decimal:2',
         'total_sale' => 'decimal:2',
         'profit' => 'decimal:2',
         'created_at' => 'datetime',

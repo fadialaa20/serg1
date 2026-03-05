@@ -18,10 +18,23 @@ class CapitalController extends Controller
         $validated = $request->validate([
             'capital_amount' => ['required', 'numeric', 'min:0'],
             'previous_profit' => ['required', 'numeric', 'min:0'],
+            'cash_amount' => ['required', 'numeric', 'min:0'],
+            'app_amount' => ['required', 'numeric', 'min:0'],
         ], [], [
             'capital_amount' => 'رأس المال الحالي',
             'previous_profit' => 'الأرباح السابقة',
+            'cash_amount' => 'رصيد الكاش',
+            'app_amount' => 'رصيد التطبيق',
         ]);
+
+        $expectedTotal = (float) $validated['capital_amount'] + (float) $validated['previous_profit'];
+        $walletTotal = (float) $validated['cash_amount'] + (float) $validated['app_amount'];
+
+        if (abs($walletTotal - $expectedTotal) > 0.01) {
+            return back()->withInput()->withErrors([
+                'cash_amount' => 'يجب أن يساوي (الكاش + التطبيق) مجموع (رأس المال + الأرباح السابقة).',
+            ]);
+        }
 
         $record = Capital::latest()->first();
 

@@ -39,10 +39,6 @@
                     <input type="number" step="0.01" min="0" name="sale_price" class="form-control" value="{{ old('sale_price') }}" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">مواصلات البيع</label>
-                    <input type="number" step="0.01" min="0" name="transport_cost" class="form-control" value="{{ old('transport_cost', 0) }}">
-                </div>
-                <div class="col-md-6">
                     <label class="form-label">تاريخ البيع</label>
                     <input type="date" name="sale_date" class="form-control" value="{{ old('sale_date', now()->format('Y-m-d')) }}" required>
                 </div>

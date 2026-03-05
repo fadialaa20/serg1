@@ -44,6 +44,30 @@
         <div class="col-lg-4 col-md-6">
             <div class="card card-stat">
                 <div class="card-body">
+                    <div class="text-muted">الرصيد الحالي كاش</div>
+                    <div class="value text-primary">{{ number_format($currentCash, 2) }} شيكل</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card card-stat">
+                <div class="card-body">
+                    <div class="text-muted">الرصيد الحالي تطبيق</div>
+                    <div class="value text-info">{{ number_format($currentApp, 2) }} شيكل</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12">
+            <div class="card card-stat">
+                <div class="card-body">
+                    <div class="text-muted">إجمالي (كاش + تطبيق)</div>
+                    <div class="value">{{ number_format($walletTotal, 2) }} شيكل</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card card-stat">
+                <div class="card-body">
                     <div class="text-muted">رأس المال المدخل</div>
                     <div class="value">{{ number_format($capitalAmount, 2) }} شيكل</div>
                 </div>

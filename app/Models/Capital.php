@@ -14,10 +14,14 @@ class Capital extends Model
     protected $fillable = [
         'capital_amount',
         'previous_profit',
+        'cash_amount',
+        'app_amount',
     ];
 
     protected $casts = [
         'capital_amount' => 'decimal:2',
         'previous_profit' => 'decimal:2',
+        'cash_amount' => 'decimal:2',
+        'app_amount' => 'decimal:2',
     ];
 }
