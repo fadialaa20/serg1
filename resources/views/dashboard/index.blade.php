@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'لوحة التحكم')
 
@@ -68,7 +68,7 @@
         <div class="col-lg-4 col-md-6">
             <div class="card card-stat">
                 <div class="card-body">
-                    <div class="text-muted">رأس المال المدخل</div>
+                    <div class="text-muted">رأس المال المُدخل</div>
                     <div class="value">{{ number_format($capitalAmount, 2) }} شيكل</div>
                 </div>
             </div>

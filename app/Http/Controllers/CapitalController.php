@@ -9,7 +9,7 @@ class CapitalController extends Controller
 {
     public function index()
     {
-        $capital = Capital::latest()->first();
+        $capital = Capital::query()->where('user_id', auth()->id())->latest()->first();
         return view('capital.index', compact('capital'));
     }
 
@@ -21,10 +21,10 @@ class CapitalController extends Controller
             'cash_amount' => ['required', 'numeric', 'min:0'],
             'app_amount' => ['required', 'numeric', 'min:0'],
         ], [], [
-            'capital_amount' => 'ÿ±ÿ£ÿ≥ ÿßŸÑŸÖÿßŸÑ ÿßŸÑÿ≠ÿßŸÑŸä',
-            'previous_profit' => 'ÿßŸÑÿ£ÿ±ÿ®ÿßÿ≠ ÿßŸÑÿ≥ÿßÿ®ŸÇÿ©',
-            'cash_amount' => 'ÿ±ÿµŸäÿØ ÿßŸÑŸÉÿßÿ¥',
-            'app_amount' => 'ÿ±ÿµŸäÿØ ÿßŸÑÿ™ÿ∑ÿ®ŸäŸÇ',
+            'capital_amount' => '—√” «·„«· «·Õ«·Ì',
+            'previous_profit' => '«·√—»«Õ «·”«»ﬁ…',
+            'cash_amount' => '—’Ìœ «·ﬂ«‘',
+            'app_amount' => '—’Ìœ «· ÿ»Ìﬁ',
         ]);
 
         $expectedTotal = (float) $validated['capital_amount'] + (float) $validated['previous_profit'];
@@ -32,17 +32,15 @@ class CapitalController extends Controller
 
         if (abs($walletTotal - $expectedTotal) > 0.01) {
             return back()->withInput()->withErrors([
-                'cash_amount' => 'Ÿäÿ¨ÿ® ÿ£ŸÜ Ÿäÿ≥ÿßŸàŸä (ÿßŸÑŸÉÿßÿ¥ + ÿßŸÑÿ™ÿ∑ÿ®ŸäŸÇ) ŸÖÿ¨ŸÖŸàÿπ (ÿ±ÿ£ÿ≥ ÿßŸÑŸÖÿßŸÑ + ÿßŸÑÿ£ÿ±ÿ®ÿßÿ≠ ÿßŸÑÿ≥ÿßÿ®ŸÇÿ©).',
+                'cash_amount' => 'ÌÃ» √‰ Ì”«ÊÌ («·ﬂ«‘ + «· ÿ»Ìﬁ) „Ã„Ê⁄ (—√” «·„«· + «·√—»«Õ «·”«»ﬁ…).',
             ]);
         }
 
-        $record = Capital::latest()->first();
-
         Capital::updateOrCreate(
-            ['id' => $record?->id],
+            ['user_id' => auth()->id()],
             $validated
         );
 
-        return redirect()->route('capital.index')->with('success', 'ÿ™ŸÖ ÿ≠ŸÅÿ∏ ÿ®ŸäÿßŸÜÿßÿ™ ÿ±ÿ£ÿ≥ ÿßŸÑŸÖÿßŸÑ ÿ®ŸÜÿ¨ÿßÿ≠.');
+        return redirect()->route('capital.index')->with('success', ' „ Õ›Ÿ »Ì«‰«  —√” «·„«· »‰Ã«Õ.');
     }
 }

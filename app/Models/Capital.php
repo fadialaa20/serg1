@@ -12,6 +12,7 @@ class Capital extends Model
     protected $table = 'capital';
 
     protected $fillable = [
+        'user_id',
         'capital_amount',
         'previous_profit',
         'cash_amount',
@@ -24,4 +25,9 @@ class Capital extends Model
         'cash_amount' => 'decimal:2',
         'app_amount' => 'decimal:2',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

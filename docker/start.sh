@@ -1,6 +1,16 @@
 #!/usr/bin/env sh
 set -e
 
+# Normalize APP_KEY for Laravel encryption.
+if [ -z "${APP_KEY:-}" ]; then
+  export APP_KEY="base64:$(php -r 'echo base64_encode(random_bytes(32));')"
+else
+  case "$APP_KEY" in
+    base64:*) ;;
+    *) export APP_KEY="base64:$APP_KEY" ;;
+  esac
+fi
+
 # Ensure Laravel writable/runtime directories exist in container.
 mkdir -p storage/framework/cache
 mkdir -p storage/framework/cache/data
