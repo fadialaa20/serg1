@@ -129,12 +129,11 @@ return new class extends Migration
         DB::table('products')->whereNull('user_id')->update(['user_id' => $fadiId]);
         DB::table('capital')->whereNull('user_id')->update(['user_id' => $fadiId]);
 
-        DB::statement('
-            UPDATE sales s
-            INNER JOIN products p ON p.id = s.product_id
-            SET s.user_id = p.user_id
-            WHERE s.user_id IS NULL
-        ');
+        DB::table('sales')
+            ->whereNull('user_id')
+            ->update([
+                'user_id' => DB::raw('(SELECT products.user_id FROM products WHERE products.id = sales.product_id)'),
+            ]);
 
         DB::table('users')->where('id', $adminId)->update(['is_admin' => 1]);
     }
