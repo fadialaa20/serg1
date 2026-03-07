@@ -5,7 +5,10 @@
 @section('content')
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
         <h2 class="mb-0">سجل المبيعات</h2>
-        <a href="{{ route('sales.create') }}" class="btn btn-primary">إضافة بيع جديد</a>
+        <div class="d-flex gap-2">
+            <a href="{{ route('sales.pos') }}" class="btn btn-success">شاشة POS</a>
+            <a href="{{ route('sales.create') }}" class="btn btn-primary">إضافة بيع جديد</a>
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm mb-3">
