@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -25,6 +26,7 @@ class Product extends Model
         'transport_cost' => 'decimal:2',
         'extra_cost' => 'decimal:2',
         'total_cost' => 'decimal:2',
+        'deleted_at' => 'datetime',
     ];
 
     public function sales()

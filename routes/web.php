@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/capital', [CapitalController::class, 'index'])->name('capital.index');
     Route::post('/capital', [CapitalController::class, 'store'])->name('capital.store');
 
-    Route::resource('products', ProductController::class)->except(['show', 'destroy']);
+    Route::resource('products', ProductController::class)->except(['show']);
 
     Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
     Route::get('/sales/create', [SaleController::class, 'create'])->name('sales.create');

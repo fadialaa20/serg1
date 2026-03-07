@@ -7,6 +7,7 @@ use App\Models\Sale;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -64,18 +65,82 @@ class SaleController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $this->validateSaleRequest($request, true);
-        $this->createSale($validated, Carbon::parse($validated['sale_date'])->startOfDay());
+        $validated = $this->validateSingleSale($request, true);
+        $this->createSingleSale($validated, Carbon::parse($validated['sale_date'])->startOfDay());
 
         return redirect()->route('sales.index')->with('success', 'تم تسجيل عملية البيع بنجاح.');
     }
 
     public function posStore(Request $request): RedirectResponse
     {
-        $validated = $this->validateSaleRequest($request, false);
-        $this->createSale($validated, now());
+        $validated = $request->validate([
+            'sale_method' => ['required', 'in:cash,app'],
+            'items' => ['required', 'array', 'min:1'],
+            'items.*.product_id' => ['required', 'integer', 'exists:products,id'],
+            'items.*.quantity_sold' => ['required', 'integer', 'min:1'],
+            'items.*.sale_price' => ['required', 'numeric', 'min:0'],
+        ], [], [
+            'sale_method' => 'نوع البيع',
+            'items' => 'عناصر السلة',
+            'items.*.product_id' => 'المنتج',
+            'items.*.quantity_sold' => 'الكمية',
+            'items.*.sale_price' => 'سعر البيع',
+        ]);
 
-        return redirect()->route('sales.pos')->with('success', 'تم حفظ عملية البيع من شاشة POS بنجاح.');
+        $items = collect($validated['items'])
+            ->map(fn ($item) => [
+                'product_id' => (int) $item['product_id'],
+                'quantity_sold' => (int) $item['quantity_sold'],
+                'sale_price' => (float) $item['sale_price'],
+            ])
+            ->values();
+
+        $requestedByProduct = $items->groupBy('product_id')->map(fn ($group) => $group->sum('quantity_sold'));
+
+        $products = Product::query()
+            ->where('user_id', auth()->id())
+            ->whereIn('id', $requestedByProduct->keys())
+            ->withSum('sales as sold_quantity', 'quantity_sold')
+            ->get()
+            ->keyBy('id');
+
+        foreach ($requestedByProduct as $productId => $requestedQty) {
+            $product = $products->get((int) $productId);
+            if (! $product) {
+                throw ValidationException::withMessages([
+                    'items' => 'أحد المنتجات في السلة غير متاح.',
+                ]);
+            }
+
+            if ($requestedQty > $product->remainingQuantity()) {
+                throw ValidationException::withMessages([
+                    'items' => 'الكمية المطلوبة للمنتج "' . $product->name . '" أكبر من المتاح.',
+                ]);
+            }
+        }
+
+        DB::transaction(function () use ($items, $products, $validated): void {
+            foreach ($items as $item) {
+                $product = $products->get($item['product_id']);
+                $costPerItem = $product->costPerItem();
+                $totalSale = $item['quantity_sold'] * $item['sale_price'];
+                $profit = $totalSale - ($costPerItem * $item['quantity_sold']);
+
+                Sale::query()->create([
+                    'user_id' => auth()->id(),
+                    'product_id' => $product->id,
+                    'sale_method' => $validated['sale_method'],
+                    'quantity_sold' => $item['quantity_sold'],
+                    'sale_price' => $item['sale_price'],
+                    'total_sale' => $totalSale,
+                    'profit' => $profit,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        });
+
+        return redirect()->route('sales.pos')->with('success', 'تم تسجيل الفاتورة بنجاح.');
     }
 
     public function destroy(Sale $sale): RedirectResponse
@@ -87,7 +152,7 @@ class SaleController extends Controller
         return redirect()->route('sales.index')->with('success', 'تم حذف عملية البيع بنجاح.');
     }
 
-    private function validateSaleRequest(Request $request, bool $requireDate): array
+    private function validateSingleSale(Request $request, bool $requireDate): array
     {
         $rules = [
             'product_id' => ['required', 'exists:products,id'],
@@ -109,7 +174,7 @@ class SaleController extends Controller
         ]);
     }
 
-    private function createSale(array $validated, Carbon $createdAt): void
+    private function createSingleSale(array $validated, Carbon $createdAt): void
     {
         $product = Product::query()
             ->where('user_id', auth()->id())

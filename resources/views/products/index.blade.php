@@ -53,6 +53,15 @@
                         <td>{{ $product->created_at?->format('Y-m-d') }}</td>
                         <td>
                             <a href="{{ route('products.edit', $product) }}" class="btn btn-sm btn-outline-secondary">تعديل</a>
+                            @if($product->remainingQuantity() === 0)
+                                <form action="{{ route('products.destroy', $product) }}" method="POST" class="d-inline" onsubmit="return confirm('سيتم حذف المنتج من قائمة المشتريات فقط مع بقاء جميع أرقام المبيعات. متابعة؟')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger">حذف</button>
+                                </form>
+                            @else
+                                <button class="btn btn-sm btn-outline-danger" disabled title="يمكن حذف المنتج فقط بعد نفاد الكمية">حذف</button>
+                            @endif
                         </td>
                     </tr>
                 @empty
