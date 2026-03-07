@@ -28,8 +28,8 @@ class AuthController extends Controller
             'login' => ['required', 'string'],
             'password' => ['required', 'string'],
         ], [], [
-            'login' => '??? ???????? ?? ????? ??????',
-            'password' => '???? ??????',
+            'login' => 'اسم المستخدم أو كود الدخول',
+            'password' => 'كلمة المرور',
         ]);
 
         $login = trim($validated['login']);
@@ -42,7 +42,7 @@ class AuthController extends Controller
         if (! $user || ! Auth::attempt(['email' => $user->email, 'password' => $validated['password']], $request->boolean('remember'))) {
             return back()
                 ->withInput($request->except('password'))
-                ->withErrors(['login' => '?????? ?????? ??? ?????.']);
+                ->withErrors(['login' => 'بيانات تسجيل الدخول غير صحيحة.']);
         }
 
         $request->session()->regenerate();
@@ -57,7 +57,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', '?? ????? ?????? ?????.');
+        return redirect()->route('login')->with('success', 'تم تسجيل الخروج بنجاح.');
     }
 
     private function ensureDefaultAdmin(): void
