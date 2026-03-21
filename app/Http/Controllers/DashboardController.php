@@ -27,7 +27,6 @@ class DashboardController extends Controller
 
         $capitalAmount = (float) ($capital?->capital_amount ?? 0);
         $previousProfit = (float) ($capital?->previous_profit ?? 0);
-        $currentCapital = $walletTotal;
         $openingCash = (float) ($capital?->cash_amount ?? 0);
         $openingBank = (float) ($capital?->bank_amount ?? 0);
 
@@ -62,6 +61,7 @@ class DashboardController extends Controller
         $currentCash = $openingCash - $purchaseCash - $expensesCash - $transfersOutCash + $salesCash + $transfersOutBank;
         $currentBank = $openingBank - $purchaseBank - $expensesBank - $transfersOutBank + $salesBank + $transfersOutCash;
         $walletTotal = $currentCash + $currentBank;
+        $currentCapital = $walletTotal;
 
         $recentSales = Sale::query()
             ->where('user_id', $userId)
@@ -70,8 +70,8 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-$recentExpenses = \App\Models\Expense::where('user_id', $userId)->latest()->take(5)->get();
-$recentTransfers = \App\Models\Transfer::where('user_id', $userId)->latest()->take(5)->get();
+        $recentExpenses = Expense::where('user_id', $userId)->latest()->take(5)->get();
+        $recentTransfers = Transfer::where('user_id', $userId)->latest()->take(5)->get();
 
         return view('dashboard.index', compact(
             'capitalAmount',
@@ -90,3 +90,4 @@ $recentTransfers = \App\Models\Transfer::where('user_id', $userId)->latest()->ta
         ));
     }
 }
+
