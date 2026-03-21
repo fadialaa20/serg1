@@ -14,7 +14,6 @@ return new class extends Migration
     {
         Schema::table('capital', function (Blueprint $table) {
             $table->renameColumn('app_amount', 'bank_amount');
-            $table->decimal('bank_amount', 12, 2)->default(0)->change();
         });
     }
 
@@ -25,7 +24,6 @@ return new class extends Migration
     {
         Schema::table('capital', function (Blueprint $table) {
             $table->renameColumn('bank_amount', 'app_amount');
-            $table->decimal('app_amount', 12, 2)->default(0)->change();
         });
     }
 };
