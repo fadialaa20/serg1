@@ -27,13 +27,13 @@
                            value="{{ old('cash_amount', $capital?->cash_amount ?? 0) }}" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">رصيد البنكي الحالي (شيكل)</label>
-                    <input type="number" step="0.01" min="0" name="bank_amount" class="form-control"
-                           value="{{ old('bank_amount', $capital?->bank_amount ?? 0) }}" required>
+                    <label class="form-label">رصيد التطبيق الحالي (شيكل)</label>
+                    <input type="number" step="0.01" min="0" name="app_amount" class="form-control"
+                           value="{{ old('app_amount', $capital?->app_amount ?? 0) }}" required>
                 </div>
                 <div class="col-12">
                     <div class="alert alert-info mb-0">
-                        يجب أن يكون: (رصيد الكاش + رصيد البنكي) = (رأس المال + الأرباح السابقة).
+                        يجب أن يكون: (رصيد الكاش + رصيد التطبيق) = (رأس المال + الأرباح السابقة).
                     </div>
                 </div>
                 <div class="col-12">

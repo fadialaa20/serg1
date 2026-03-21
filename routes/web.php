@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/capital', [CapitalController::class, 'index'])->name('capital.index');
     Route::post('/capital', [CapitalController::class, 'store'])->name('capital.store');
 
-    Route::resource('products', ProductController::class)->except(['show']); 
+    Route::resource('products', ProductController::class)->except(['show']);
 
     Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
     Route::get('/sales/create', [SaleController::class, 'create'])->name('sales.create');
@@ -32,9 +32,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/sales/{sale}', [SaleController::class, 'destroy'])->name('sales.destroy');
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-
-    Route::post('/dashboard/expense', [ExpenseController::class, '__invoke'])->name('dashboard.expense.store');
-    Route::post('/dashboard/transfer', [TransferController::class, '__invoke'])->name('dashboard.transfer.store');
 
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');

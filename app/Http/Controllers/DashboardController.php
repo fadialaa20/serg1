@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Capital;
 use App\Models\Product;
-use App\Models\Expense;
 use App\Models\Sale;
-use App\Models\Transfer;
 
 class DashboardController extends Controller
 {
@@ -29,7 +27,7 @@ class DashboardController extends Controller
         $previousProfit = (float) ($capital?->previous_profit ?? 0);
         $currentCapital = $capitalAmount + $previousProfit + $totalProfit;
         $openingCash = (float) ($capital?->cash_amount ?? 0);
-        $openingBank = (float) ($capital?->bank_amount ?? 0);
+        $openingApp = (float) ($capital?->app_amount ?? 0);
 
         $purchaseCash = (float) Product::query()
             ->where('user_id', $userId)
@@ -37,9 +35,9 @@ class DashboardController extends Controller
                 $query->where('purchase_method', 'cash')->orWhereNull('purchase_method');
             })
             ->sum('total_cost');
-        $purchaseBank = (float) Product::query()
+        $purchaseApp = (float) Product::query()
             ->where('user_id', $userId)
-            ->where('purchase_method', 'bank')
+            ->where('purchase_method', 'app')
             ->sum('total_cost');
 
         $salesCash = (float) Sale::query()
@@ -48,20 +46,14 @@ class DashboardController extends Controller
                 $query->where('sale_method', 'cash')->orWhereNull('sale_method');
             })
             ->sum('total_sale');
-        $salesBank = (float) Sale::query()
+        $salesApp = (float) Sale::query()
             ->where('user_id', $userId)
-            ->where('sale_method', 'bank')
+            ->where('sale_method', 'app')
             ->sum('total_sale');
 
-        $expensesCash = Expense::where('user_id', $userId)->where('wallet_type', 'cash')->sum('amount');
-        $expensesBank = Expense::where('user_id', $userId)->where('wallet_type', 'bank')->sum('amount');
-
-        $transfersOutCash = Transfer::where('user_id', $userId)->where('from_wallet', 'cash')->sum('amount');
-        $transfersOutBank = Transfer::where('user_id', $userId)->where('from_wallet', 'bank')->sum('amount');
-
-        $currentCash = $openingCash - $purchaseCash - $expensesCash - $transfersOutCash + $salesCash + $transfersOutBank;
-        $currentBank = $openingBank - $purchaseBank - $expensesBank - $transfersOutBank + $salesBank + $transfersOutCash;
-        $walletTotal = $currentCash + $currentBank;
+        $currentCash = $openingCash - $purchaseCash + $salesCash;
+        $currentApp = $openingApp - $purchaseApp + $salesApp;
+        $walletTotal = $currentCash + $currentApp;
 
         $recentSales = Sale::query()
             ->where('user_id', $userId)
@@ -69,9 +61,6 @@ class DashboardController extends Controller
             ->latest()
             ->take(5)
             ->get();
-
-        $recentExpenses = \\App\\Models\\Expense::where('user_id', $userId)->latest()->take(5)->get();
-        $recentTransfers = \\App\\Models\\Transfer::where('user_id', $userId)->latest()->take(5)->get();
 
         return view('dashboard.index', compact(
             'capitalAmount',
@@ -82,11 +71,9 @@ class DashboardController extends Controller
             'remainingItems',
             'currentCapital',
             'currentCash',
-            'currentBank',
+            'currentApp',
             'walletTotal',
-            'recentSales',
-            'recentExpenses',
-            'recentTransfers'
+            'recentSales'
         ));
     }
 }
