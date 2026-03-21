@@ -12,10 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('capital', function (Blueprint $table) {
-            $table->decimal('bank_amount', 12, 2)->default(0)->after('cash_amount')->change();
-        });
-        DB::statement('ALTER TABLE capital RENAME COLUMN bank_amount TO app_amount;');
+        if (Schema::hasColumn('capital', 'app_amount')) {
+            Schema::table('capital', function (Blueprint $table) {
+                $table->renameColumn('app_amount', 'bank_amount');
+            });
+        }
     }
 
     /**
@@ -23,6 +24,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('ALTER TABLE capital CHANGE COLUMN `bank_amount` `app_amount` DECIMAL(12,2) DEFAULT 0 AFTER `cash_amount`;');
+        if (Schema::hasColumn('capital', 'bank_amount')) {
+            Schema::table('capital', function (Blueprint $table) {
+                $table->renameColumn('bank_amount', 'app_amount');
+            });
+        }
     }
 };
