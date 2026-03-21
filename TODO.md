@@ -13,10 +13,16 @@
 ### 3. نشر على Render
 - commit & push
 
-### حالة الحالية:
+### حالة الحالية: (تم إضافة fix migration للـ prod DB)
+
+- [x] الخطة تمت الموافقة عليها
+- [x] تم تعديل الـ migration  
+- [x] تم الاختبار المحلي ✅ (الميجريشن [6] Ran ✓)
+- [x] تم النشر ✅ (git push نجح)
+- [x] **تم إضافة fix migration** `2026_03_21_125852_fix_capital_bank_amount_column_for_production.php` لإصلاح DB الإنتاج
 - [x] الخطة تمت الموافقة عليها
 - [x] تم تعديل الـ migration
 - [x] تم الاختبار المحلي ✅ (الميجريشن [6] Ran ✓)
 - [x] تم النشر ✅ (git push نجح)
 
-**ملاحظة:** تأكد من تثبيت `doctrine/dbal` إذا لم يكن موجوداً: `composer require doctrine/dbal`
+**تم:** doctrine/dbal مثبت ✅ composer.json + lock محدث
