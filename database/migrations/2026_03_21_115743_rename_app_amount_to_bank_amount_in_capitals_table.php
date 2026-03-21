@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
+
 
 return new class extends Migration
 {
@@ -12,7 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('ALTER TABLE capital CHANGE COLUMN `app_amount` `bank_amount` DECIMAL(12,2) DEFAULT 0 AFTER `cash_amount`;');
+        Schema::table('capital', function (Blueprint $table) {
+            $table->renameColumn('app_amount', 'bank_amount');
+            $table->decimal('bank_amount', 12, 2)->default(0)->change();
+        });
     }
 
     /**
@@ -20,6 +23,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('ALTER TABLE capital CHANGE COLUMN `bank_amount` `app_amount` DECIMAL(12,2) DEFAULT 0 AFTER `cash_amount`;');
+        Schema::table('capital', function (Blueprint $table) {
+            $table->renameColumn('bank_amount', 'app_amount');
+            $table->decimal('app_amount', 12, 2)->default(0)->change();
+        });
     }
 };

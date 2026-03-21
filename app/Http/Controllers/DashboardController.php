@@ -70,8 +70,8 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        $recentExpenses = \\App\\Models\\Expense::where('user_id', $userId)->latest()->take(5)->get();
-        $recentTransfers = \\App\\Models\\Transfer::where('user_id', $userId)->latest()->take(5)->get();
+$recentExpenses = App\Models\Expense::where('user_id', $userId)->latest()->take(5)->get();
+$recentTransfers = App\Models\Transfer::where('user_id', $userId)->latest()->take(5)->get();
 
         return view('dashboard.index', compact(
             'capitalAmount',
