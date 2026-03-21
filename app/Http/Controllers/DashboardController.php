@@ -61,7 +61,8 @@ class DashboardController extends Controller
         $currentCash = $openingCash - $purchaseCash - $expensesCash - $transfersOutCash + $salesCash + $transfersOutBank;
         $currentBank = $openingBank - $purchaseBank - $expensesBank - $transfersOutBank + $salesBank + $transfersOutCash;
         $walletTotal = $currentCash + $currentBank;
-        $currentCapital = $walletTotal;
+        $currentCapital = $capitalAmount + $previousProfit + $totalProfit;
+        $walletTotal = $capitalAmount + $previousProfit + $totalProfit;
 
         $recentSales = Sale::query()
             ->where('user_id', $userId)
