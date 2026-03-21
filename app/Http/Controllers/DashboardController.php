@@ -27,7 +27,7 @@ class DashboardController extends Controller
 
         $capitalAmount = (float) ($capital?->capital_amount ?? 0);
         $previousProfit = (float) ($capital?->previous_profit ?? 0);
-$currentCapital = $capitalAmount + $previousProfit + $totalProfit;
+        $currentCapital = $walletTotal;
         $openingCash = (float) ($capital?->cash_amount ?? 0);
         $openingBank = (float) ($capital?->bank_amount ?? 0);
 
