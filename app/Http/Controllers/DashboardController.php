@@ -62,7 +62,7 @@ class DashboardController extends Controller
         $currentBank = $openingBank - $purchaseBank - $expensesBank - $transfersOutBank + $salesBank + $transfersOutCash;
         $walletTotal = $currentCash + $currentBank;
         $currentCapital = $capitalAmount + $previousProfit + $totalProfit;
-        $walletTotal = $capitalAmount + $previousProfit + $totalProfit;
+        $walletDifference = $walletTotal - $currentCapital;
 
         $recentSales = Sale::query()
             ->where('user_id', $userId)
@@ -85,10 +85,10 @@ class DashboardController extends Controller
             'currentCash',
             'currentBank',
             'walletTotal',
+            'walletDifference',
             'recentSales',
             'recentExpenses',
             'recentTransfers'
         ));
     }
 }
-

@@ -1,28 +1,10 @@
-# TODO: إصلاح Migration للتوافق مع PostgreSQL
+# TODO: إصلاح مشكلة حساب رأس المال في الداشبورد
 
 ## الخطوات:
+- [ ] الخطوة 1: تعديل DashboardController.php - إزالة override لـ walletTotal، إضافة expectedCapital و walletDifference.
+- [ ] الخطوة 2: تعديل resources/views/dashboard/index.blade.php - عرض رأس المال المتوقع والفرق بلون.
+- [ ] الخطوة 3: اختبار العرض في الداشبورد.
+- [ ] الخطوة 4: Commit التغييرات في branch blackboxai/fix-dashboard-capital.
+- [ ] الخطوة 5: رفع Pull Request على GitHub.
 
-### 1. تعديل ملف الـ migration [حالي]
-- تحديث `database/migrations/2026_03_21_115743_rename_app_amount_to_bank_amount_in_capitals_table.php`
-  - استخدام Laravel Schema methods بدلاً من raw SQL للتوافق مع PG و MySQL.
-
-### 2. اختبار محلي
-- `php artisan migrate:rollback --step=1`
-- `php artisan migrate`
-
-### 3. نشر على Render
-- commit & push
-
-### حالة الحالية: (تم إضافة fix migration للـ prod DB)
-
-- [x] الخطة تمت الموافقة عليها
-- [x] تم تعديل الـ migration  
-- [x] تم الاختبار المحلي ✅ (الميجريشن [6] Ran ✓)
-- [x] تم النشر ✅ (git push نجح)
-- [x] **تم إضافة fix migration** `2026_03_21_125852_fix_capital_bank_amount_column_for_production.php` لإصلاح DB الإنتاج
-- [x] الخطة تمت الموافقة عليها
-- [x] تم تعديل الـ migration
-- [x] تم الاختبار المحلي ✅ (الميجريشن [6] Ran ✓)
-- [x] تم النشر ✅ (git push نجح)
-
-**تم:** doctrine/dbal مثبت ✅ composer.json + lock محدث
+حالة: جاري العمل...

@@ -60,9 +60,7 @@
         <div class="col-lg-4 col-md-12">
             <div class="card card-stat">
                 <div class="card-body">
-                    <div class="text-muted">إجمالي (كاش + بنكي)</div>
-                    <div class="value">{{ number_format($walletTotal, 2) }} شيكل</div>
-                </div>
+                    <div class="text-muted">إجمالي (كاش + بنكي)</div>\n                    <div class="value {{ abs($walletDifference) > 0.01 ? 'text-danger' : 'text-success' }}">{{ number_format($walletTotal, 2) }} شيكل</div>\n                    @if(abs($walletDifference) > 0.01)\n                        <div class="text-danger small mt-1 fw-bold">⚠️ الفرق: {{ number_format($walletDifference, 2) }} شيكل (المتوقع: {{ number_format($currentCapital, 2) }})</div>\n                    @else\n                        <div class="text-success small mt-1">✅ يطابق رأس المال المتوقع</div>\n                    @endif\n                </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-6">
